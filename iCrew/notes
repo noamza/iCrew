@@ -1,0 +1,218 @@
+
+cd ~/Desktop/app;ssh -i hvhkey.pem ec2-user@ec2-54-200-25-136.us-west-2.compute.amazonaws.com
+freeway drive
+101 Bayshore Boulevard
+San Francisco, CA 94124
+
+/*
+ The method you're using now, -locationManager:didUpdateToLocation:fromLocation is the best place to do anything with user location. There are a couple of things that I'd do different from you though.
+ 
+ First of all, you accept the very first location update as the best. You've probably asked for a certain accuracy, but asking for it doesn't mean that the newLocation from that method is the best. Often, you'll get a very low accuracy, or a cached location from some time in the past. What I'd do is to check the new location for age and accuracy, and only when it's good zoom in.
+ 
+ The other thing I'd do is to turn off location updates, either when an update with good accuracy came in, or 30 seconds after updates start. Set a timer to turn it off, and when you turn it off, set a longer timer to turn it back on and check again.
+ 
+ Lastly, make sure that you've properly implemented the -locationManager:didFailWithError: for all cases. It's always one of the things tested when you submit an app. If it doesn't fail gracefully (for example, in Airplane mode) it will probably get rejected.
+ 
+ Search around Stack Overflow for techniques and code to do these things.
+ */
+
+
+//NSLog(@"JASON DUMP\n%@", routesArr);
+
+/*
+ NSMutableData* _receivedData;
+ if (con) {
+ _receivedData=[NSMutableData data];
+ NSLog(@"returned data %@", _receivedData);
+ 
+ 
+ } else {
+ NSLog(@"%@",@"we have problems contacting the mother ship g");
+ }
+ */
+
+/*
+/*
+    if(startup){
+        [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error == nil && [placemarks count] > 0) {
+                placemark = [placemarks lastObject];
+                
+                /*
+                NSString *address = [NSString stringWithFormat:@"%@ %@\n%@ %@\n%@\n%@",
+                                     placemark.subThoroughfare, placemark.thoroughfare,
+                                     placemark.postalCode, placemark.locality,
+                                     placemark.administrativeArea,
+                                     placemark.country];
+                 /
+                NSLog(@"setting region %@", region);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    startup = false;
+                    [manager stopUpdatingLocation];
+                    region = placemark.region;
+                    //[self.sdController.searchResultsTableView reloadData];
+                });
+                
+            } else {
+                NSLog(@"%@", error.debugDescription);
+            }
+        }];
+    }
+    //*/
+*/
+
+/*
+ 
+ public Document getDocument(LatLng start, LatLng end, String mode) {
+ String url = "http://maps.googleapis.com/maps/api/directions/xml?"
+ + "origin=" + start.latitude + "," + start.longitude
+ + "&destination=" + end.latitude + "," + end.longitude
+ + "&sensor=false&units=metric&mode="+ mode;
+ 
+ try {
+ HttpClient httpClient = new DefaultHttpClient();
+ HttpContext localContext = new BasicHttpContext();
+ HttpPost httpPost = new HttpPost(url);
+ HttpResponse response = httpClient.execute(httpPost, localContext);
+ InputStream in = response.getEntity().getContent();
+ DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+ Document doc = builder.parse(in);
+ return doc;
+ } catch (Exception e) {
+ e.printStackTrace();
+ }
+ return null;
+ }
+ 
+ private String url = "http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
+ import org.apache.http.NameValuePair;
+ import org.apache.http.client.entity.UrlEncodedFormEntity;
+ import org.apache.http.message.BasicNameValuePair;
+ ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+ nameValuePairs.add(new BasicNameValuePair("id", "'"+id+"'"));
+ nameValuePairs.add(new BasicNameValuePair("time", Long.toString(location.getTime())));
+ nameValuePairs.add(new BasicNameValuePair("latitude",Double.toString(location.getLatitude())));
+ nameValuePairs.add(new BasicNameValuePair("longitude",Double.toString(location.getLongitude())));
+ nameValuePairs.add(new BasicNameValuePair("route", "'" + route + "'"));
+ nameValuePairs.add(new BasicNameValuePair("eta","'"+eta+"'"));
+ try {
+ HtmlJsonConnection lc = new HtmlJsonConnection(this);
+ lc.setUrl(url);
+ lc.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+ lc.execute(0);
+ } catch {}
+ public void setUrl(String url) {this.url = url;}
+ public void setEntity(HttpEntity entity) {this.entity = entity;}
+ HttpClient httpclient = new DefaultHttpClient();
+ HttpPost httppost = new HttpPost(url);
+ httppost.setEntity(entity);
+ HttpResponse response = null;
+ String result = "";
+ try {
+ response = httpclient.execute(httppost);
+ } catch {}
+ HttpEntity responseEntity = response.getEntity();
+ try{
+ InputStream is = responseEntity.getContent();
+ BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
+ StringBuilder sb = new StringBuilder();
+ String line = null;
+ while ((line = reader.readLine()) != null) {}
+ }
+ */
+/*
+ - (void) sendTo
+ {
+ NSMutableData* _receivedData;
+ NSString *url = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/n.php";
+ NSMutableURLRequest *theRequest=[NSMutableURLRequest
+ requestWithURL:[NSURL URLWithString:
+ url]
+ cachePolicy:NSURLRequestUseProtocolCachePolicy
+ timeoutInterval:60.0];
+ NSDictionary* jsonDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+ @"Value1", @"id",
+ @"Value2", @"et",
+ nil];
+ NSError *error;
+ NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary
+ options:NSJSONWritingPrettyPrinted error:&error];
+ [theRequest setHTTPMethod:@"POST"];
+ [theRequest addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+ 
+ // should check for and handle errors here but we aren't
+ [theRequest setHTTPBody:jsonData];
+ NSURLConnection *con = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+ //NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+ 
+ 
+ if (con) {
+ _receivedData=[NSMutableData data];
+ } else {
+ //something bad happened
+ }
+ }
+ */
+
+/*
+ //*///
+- (void)sendToServer5//:(NSDictionary *)nameValuePairs
+{
+    
+    NSString *url = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/n.php";
+    UIDevice *device = [UIDevice currentDevice];
+    //NSString *deviceRef = [device uniqueIdentifier];
+    
+    NSDictionary *myDictionary = [NSDictionary dictionaryWithObject:@"mr ios" forKey:@"id"];
+    NSError *jerror;
+    NSData *postData = [NSJSONSerialization dataWithJSONObject:myDictionary
+                                                        options:0
+                                                        error:&jerror];
+    if (!postData) {
+        NSLog(@"JSON error: %@", jerror);
+    } else {
+        NSString *JSONString = [[NSString alloc] initWithBytes:[postData bytes] length:[postData length] encoding:NSUTF8StringEncoding];
+        NSLog(@"JSON OUTPUT: %@",JSONString);
+    }
+    
+    //NSString *post = @"iOS says hi";
+    //NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    NSURLResponse *response;
+    
+    NSError *error;
+    NSData *jsonData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    //*
+    NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers|NSJSONReadingMutableLeaves error:&error] : nil;
+    if (error) NSLog(@"nzlog[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    //*/
+    NSLog(@"results sent");
+////
+
+}
+
+- (void)sendToServer2:(NSDictionary *)nameValuePairs
+{
+    NSString *url = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
+    NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
+    [rq setHTTPMethod:@"POST"];
+    NSData *jsonData = [@"{ \"foo\": 1337 }" dataUsingEncoding:NSUTF8StringEncoding];
+    [rq setHTTPBody:jsonData];
+    [rq setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [rq setValue:[NSString stringWithFormat:@"%ld", (long)[jsonData length]] forHTTPHeaderField:@"Content-Length"];
+    /*
+    [NSURLConnection  sendAsynchronousRequest:rq queue:<#(NSOperationQueue *)#> completionHandler: completion:^(NSURLResponse *rsp, NSData *data) {
+        NSLog(@"POST sent!");
+    }];
+
+    [NSURLConnection  sendAsynchronousRequest:rq completion:^(NSURLResponse *rsp, NSData *data) {
+        NSLog(@"POST sent!");
+    }];
+     */
+}

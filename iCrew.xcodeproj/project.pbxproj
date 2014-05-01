@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB62B92418CA7C9600F3F9C2 /* NZAMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB62B92318CA7C9600F3F9C2 /* NZAMainViewController.m */; };
+		CB62B92618CA8BF300F3F9C2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB62B92518CA8BF300F3F9C2 /* CoreLocation.framework */; };
+		CB62B92818D1244F00F3F9C2 /* notes in Resources */ = {isa = PBXBuildFile; fileRef = CB62B92718D1244F00F3F9C2 /* notes */; };
 		CB7997F318C69A4400792001 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7997F218C69A4400792001 /* Foundation.framework */; };
 		CB7997F518C69A4400792001 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7997F418C69A4400792001 /* CoreGraphics.framework */; };
 		CB7997F718C69A4400792001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7997F618C69A4400792001 /* UIKit.framework */; };
@@ -19,6 +22,8 @@
 		CB79980E18C69A4500792001 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB7997F618C69A4400792001 /* UIKit.framework */; };
 		CB79981618C69A4500792001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CB79981418C69A4500792001 /* InfoPlist.strings */; };
 		CB79981818C69A4500792001 /* iCrewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CB79981718C69A4500792001 /* iCrewTests.m */; };
+		CB79982218C69A9D00792001 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB79982118C69A9D00792001 /* Main.storyboard */; };
+		CB79982418C69E2100792001 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB79982318C69E2100792001 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +37,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CB62B92218CA7C9600F3F9C2 /* NZAMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NZAMainViewController.h; sourceTree = "<group>"; };
+		CB62B92318CA7C9600F3F9C2 /* NZAMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NZAMainViewController.m; sourceTree = "<group>"; };
+		CB62B92518CA8BF300F3F9C2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CB62B92718D1244F00F3F9C2 /* notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = notes; sourceTree = "<group>"; };
 		CB7997EF18C69A4400792001 /* iCrew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iCrew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB7997F218C69A4400792001 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CB7997F418C69A4400792001 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -48,6 +57,8 @@
 		CB79981318C69A4500792001 /* iCrewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iCrewTests-Info.plist"; sourceTree = "<group>"; };
 		CB79981518C69A4500792001 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CB79981718C69A4500792001 /* iCrewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCrewTests.m; sourceTree = "<group>"; };
+		CB79982118C69A9D00792001 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		CB79982318C69E2100792001 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB62B92618CA8BF300F3F9C2 /* CoreLocation.framework in Frameworks */,
+				CB79982418C69E2100792001 /* MapKit.framework in Frameworks */,
 				CB7997F518C69A4400792001 /* CoreGraphics.framework in Frameworks */,
 				CB7997F718C69A4400792001 /* UIKit.framework in Frameworks */,
 				CB7997F318C69A4400792001 /* Foundation.framework in Frameworks */,
@@ -96,6 +109,8 @@
 		CB7997F118C69A4400792001 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB62B92518CA8BF300F3F9C2 /* CoreLocation.framework */,
+				CB79982318C69E2100792001 /* MapKit.framework */,
 				CB7997F218C69A4400792001 /* Foundation.framework */,
 				CB7997F418C69A4400792001 /* CoreGraphics.framework */,
 				CB7997F618C69A4400792001 /* UIKit.framework */,
@@ -108,9 +123,13 @@
 			isa = PBXGroup;
 			children = (
 				CB79980118C69A4500792001 /* NZAAppDelegate.h */,
+				CB79982118C69A9D00792001 /* Main.storyboard */,
 				CB79980218C69A4500792001 /* NZAAppDelegate.m */,
 				CB79980418C69A4500792001 /* Images.xcassets */,
 				CB7997F918C69A4500792001 /* Supporting Files */,
+				CB62B92218CA7C9600F3F9C2 /* NZAMainViewController.h */,
+				CB62B92318CA7C9600F3F9C2 /* NZAMainViewController.m */,
+				CB62B92718D1244F00F3F9C2 /* notes */,
 			);
 			path = iCrew;
 			sourceTree = "<group>";
@@ -192,6 +211,14 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Almog, Noam (ARC-AF)[UNIV OF CALIFORNIA   SANTA CRUZ]";
 				TargetAttributes = {
+					CB7997EE18C69A4400792001 = {
+						DevelopmentTeam = XBTV59NVDK;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
 					CB79980918C69A4500792001 = {
 						TestTargetID = CB7997EE18C69A4400792001;
 					};
@@ -220,7 +247,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB79982218C69A9D00792001 /* Main.storyboard in Resources */,
 				CB7997FD18C69A4500792001 /* InfoPlist.strings in Resources */,
+				CB62B92818D1244F00F3F9C2 /* notes in Resources */,
 				CB79980518C69A4500792001 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +271,7 @@
 			files = (
 				CB79980318C69A4500792001 /* NZAAppDelegate.m in Sources */,
 				CB7997FF18C69A4500792001 /* main.m in Sources */,
+				CB62B92418CA7C9600F3F9C2 /* NZAMainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,10 +390,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCrew/iCrew-Prefix.pch";
 				INFOPLIST_FILE = "iCrew/iCrew-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -373,10 +407,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCrew/iCrew-Prefix.pch";
 				INFOPLIST_FILE = "iCrew/iCrew-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -442,6 +480,7 @@
 				CB79981D18C69A4500792001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CB79981E18C69A4500792001 /* Build configuration list for PBXNativeTarget "iCrewTests" */ = {
 			isa = XCConfigurationList;
@@ -450,6 +489,7 @@
 				CB79982018C69A4500792001 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

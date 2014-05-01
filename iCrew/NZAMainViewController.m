@@ -30,7 +30,7 @@ CLGeocoder *geocoder;
 CLPlacemark *placemark;
 BOOL stopped = true;
 bool startup = true;
-double currentLat = 0; //apple
+double currentLat = 0; 
 double currentLon = 0;
 //double destinationLat = 37.41500000; //moffett
 //double destinationLon= -122.0483000; //moffett

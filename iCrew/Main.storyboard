@@ -62,16 +62,17 @@
                             <constraint firstAttribute="trailing" secondItem="K50-Lv-7cI" secondAttribute="trailing" id="0Hy-zb-KYy"/>
                             <constraint firstItem="l1b-Vg-L5P" firstAttribute="top" secondItem="ocF-KC-Lyl" secondAttribute="bottom" constant="8" id="1qW-RB-ga1"/>
                             <constraint firstItem="l1b-Vg-L5P" firstAttribute="leading" secondItem="Geq-G8-Qq3" secondAttribute="leading" id="47k-kB-V3V"/>
-                            <constraint firstAttribute="trailing" secondItem="aH3-ip-T9U" secondAttribute="trailing" constant="80" id="4ig-cM-L3e"/>
                             <constraint firstItem="K50-Lv-7cI" firstAttribute="top" secondItem="NdE-HP-qqZ" secondAttribute="bottom" constant="6" id="EMt-NM-z9L"/>
+                            <constraint firstItem="aH3-ip-T9U" firstAttribute="top" secondItem="K50-Lv-7cI" secondAttribute="bottom" id="Jf6-lG-50z"/>
                             <constraint firstItem="ocF-KC-Lyl" firstAttribute="top" secondItem="aH3-ip-T9U" secondAttribute="bottom" constant="8" id="Odx-dh-Krg"/>
                             <constraint firstItem="ocF-KC-Lyl" firstAttribute="leading" secondItem="Geq-G8-Qq3" secondAttribute="leading" constant="20" id="R6t-Hf-Bis"/>
                             <constraint firstItem="K50-Lv-7cI" firstAttribute="leading" secondItem="Geq-G8-Qq3" secondAttribute="leading" id="W9c-Pw-AvV"/>
-                            <constraint firstItem="aH3-ip-T9U" firstAttribute="leading" secondItem="Geq-G8-Qq3" secondAttribute="leading" constant="97" id="aNh-M7-s5K"/>
                             <constraint firstAttribute="trailing" secondItem="ocF-KC-Lyl" secondAttribute="trailing" constant="20" id="arb-8e-iYE"/>
                             <constraint firstItem="c4Y-gU-6yd" firstAttribute="top" secondItem="l1b-Vg-L5P" secondAttribute="bottom" id="dRV-tu-gbi"/>
                             <constraint firstAttribute="trailing" secondItem="l1b-Vg-L5P" secondAttribute="trailing" id="fmf-7E-B5K"/>
                             <constraint firstItem="aH3-ip-T9U" firstAttribute="top" secondItem="K50-Lv-7cI" secondAttribute="bottom" id="pCg-YO-SML"/>
+                            <constraint firstAttribute="trailing" secondItem="aH3-ip-T9U" secondAttribute="trailing" constant="20" symbolic="YES" id="rie-2g-s7C"/>
+                            <constraint firstItem="aH3-ip-T9U" firstAttribute="leading" secondItem="Geq-G8-Qq3" secondAttribute="leading" constant="20" symbolic="YES" id="tVU-DA-8bQ"/>
                         </constraints>
                     </view>
                     <connections>

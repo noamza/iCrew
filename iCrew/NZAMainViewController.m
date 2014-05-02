@@ -54,8 +54,18 @@ double timeOfLastUpload = -1;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.idNameTextField.text = @"sf";
-    self.searchBar.text = @"37.732015,-122.432492";//@"25 Rousseau Street, San Francisco, CA";//@"101 Bayshore Boulevard, San Francisco, CA 94124";
+    //restore from persistent memory
+    idname = [[NSUserDefaults standardUserDefaults] stringForKey:@"idname"];
+    self.idNameTextField.text = idname;
+    destination = [[NSUserDefaults standardUserDefaults] stringForKey:@"destination"];
+    if(destination == nil) {
+        self.searchBar.text = [[NSUserDefaults standardUserDefaults] stringForKey:@"destination"];
+    } else {
+        self.searchBar.text = destination;
+        destinationLat = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLat"];
+        destinationLon = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLon"];
+    }
+    //@"37.732015,-122.432492";//@"25 Rousseau Street, San Francisco, CA";//@"101 Bayshore Boulevard, San Francisco, CA 94124";
 	manager = [[CLLocationManager alloc] init];
     manager.delegate = self;
     manager.desiredAccuracy = kCLLocationAccuracyBest; //try best for navigation!
@@ -68,7 +78,8 @@ double timeOfLastUpload = -1;
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
      */
-    NSLog(@"started FOR THE FIRST TIME");
+    NSLog(@"started FOR THE FIRST TIME stored data: %@ %@ %f %f", idname, destination, destinationLat, destinationLon);
+    
 }
 
 
@@ -111,6 +122,7 @@ double timeOfLastUpload = -1;
     return cell;
 }
 
+//getting destionation from search results table
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -118,39 +130,29 @@ double timeOfLastUpload = -1;
     destination = location[@"address"];
     destinationLat = [(NSNumber*) location[@"lat"] doubleValue];
     destinationLon = [(NSNumber*) location[@"lon"] doubleValue];
+    //saving to persistent mem
+    [[NSUserDefaults standardUserDefaults] setObject:destination    forKey:@"destination"];
+    [[NSUserDefaults standardUserDefaults] setDouble:destinationLat forKey:@"destinationLat"];
+    [[NSUserDefaults standardUserDefaults] setDouble:destinationLon forKey:@"destinationLon"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+   
     NSLog(@">>>%@ %f %f", destination, destinationLat,destinationLon);
-    /*
-    [geocoder geocodeAddressString:destination completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (error == nil && [placemarks count] > 0) {
-            placemark = [placemarks lastObject];
-            destinationLat = placemark.location.coordinate.latitude;
-            destinationLat = placemark.location.coordinate.longitude;
-            if ([placemarks count] > 1){
-                NSLog(@"count > 1????? %d",[placemarks count]);
-                for (CLPlacemark *ap in placemarks){
-                    NSLog(@"count > 1????? %@",placemark);
-                }
-            }
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 destinationLat = placemark.location.coordinate.latitude;
-                 destinationLat = placemark.location.coordinate.longitude;
-                 NSLog(@">>>>>>>>>>>>>>>%@ %f %f", destination, destinationLat,destinationLon);
-             }); //
-        } else {
-            NSLog(@"%@", error.debugDescription);
-        }
-    } ];
-     */
     [self.searchDisplayController setActive:NO];
     [self.searchBar resignFirstResponder];
     [self.searchBar setText:destination];
     self.status.text = @"";
 }
 
+//saving idname from text field
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.idNameTextField) {
         [textField resignFirstResponder];
         idname = self.idNameTextField.text;
+       
+        //saving to persistent memory
+        [[NSUserDefaults standardUserDefaults] setObject:idname forKey:@"idname"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         NSLog(@"name entered: %@", idname);
         return NO;
     }

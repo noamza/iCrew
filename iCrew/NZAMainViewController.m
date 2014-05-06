@@ -12,7 +12,7 @@
 
 @interface NZAMainViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet UIButton *transmitButton;
+@property (weak, nonatomic) IBOutlet UIButton *transmitButton; //comment
 @property (weak, nonatomic) IBOutlet UILabel *status;
 @property (weak, nonatomic) IBOutlet UITextField *idNameTextField;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *sdController;

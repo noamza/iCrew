@@ -55,16 +55,19 @@ double timeOfLastUpload = -1;
 {
     [super viewDidLoad];
     //restore from persistent memory
-    idname = [[NSUserDefaults standardUserDefaults] stringForKey:@"idname"];
-    self.idNameTextField.text = idname;
-    destination = [[NSUserDefaults standardUserDefaults] stringForKey:@"destination"];
-    if(destination == nil) {
-        self.searchBar.text = [[NSUserDefaults standardUserDefaults] stringForKey:@"destination"];
-    } else {
+    
+    if([[NSUserDefaults standardUserDefaults] stringForKey:@"idname"] != nil){
+        idname = [[NSUserDefaults standardUserDefaults] stringForKey:@"idname"];
+        self.idNameTextField.text = idname;
+    }
+    
+    if([[NSUserDefaults standardUserDefaults] stringForKey:@"destination"] != nil) {
+        destination = [[NSUserDefaults standardUserDefaults] stringForKey:@"destination"];
         self.searchBar.text = destination;
         destinationLat = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLat"];
         destinationLon = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLon"];
     }
+    
     //@"37.732015,-122.432492";//@"25 Rousseau Street, San Francisco, CA";//@"101 Bayshore Boulevard, San Francisco, CA 94124";
 	manager = [[CLLocationManager alloc] init];
     manager.delegate = self;
@@ -144,7 +147,7 @@ double timeOfLastUpload = -1;
 }
 
 //saving idname from text field
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField { is there another way to save?
     if (textField == self.idNameTextField) {
         [textField resignFirstResponder];
         idname = self.idNameTextField.text;
@@ -530,6 +533,7 @@ double timeOfLastUpload = -1;
 - (void)getBGLocation
 {
     NSLog(@"starting background location");
+    [[NSUserDefaults standardUserDefaults] synchronize]; //help keep data persistent(?)
     if(!stopped){
         manager = [[CLLocationManager alloc] init];
         manager.delegate = self;

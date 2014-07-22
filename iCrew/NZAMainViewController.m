@@ -68,6 +68,7 @@ double timeOfLastUpload = -1;
         destinationLon = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLon"];
     }
     
+    //Initialize location manager
     //@"37.732015,-122.432492";//@"25 Rousseau Street, San Francisco, CA";//@"101 Bayshore Boulevard, San Francisco, CA 94124";
 	manager = [[CLLocationManager alloc] init];
     manager.delegate = self;
@@ -88,26 +89,30 @@ double timeOfLastUpload = -1;
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
 {
+    //Called every time something is typed in the search box
     //NSLog(@"searchText: %@    scope: %@", searchText, scope);
-    [self getDestination:searchText];
     //[searchResults addObject: searchText];
     //[self.sdController.searchResultsTableView reloadData];
     //NSLog(@"filter, after getDistination: %@: %@",searchText, searchResults);
+    [self getDestination:searchText];
 }
 
 
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
-    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:
-        [self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
+    //called everytime search is entered
+    [self filterContentForSearchText:searchString scope:[[self.searchDisplayController.searchBar scopeButtonTitles] objectAtIndex:[self.searchDisplayController.searchBar selectedScopeButtonIndex]]];
     return YES;
 }
 
+//search view table
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    //tells table how large to be based on search results array
     return [searchResults count];
 }
 
+//populates search table
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"CustomTableCell";
@@ -125,7 +130,7 @@ double timeOfLastUpload = -1;
     return cell;
 }
 
-//getting destionation from search results table
+//getting destionation from search results table when cell is selected
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -147,7 +152,7 @@ double timeOfLastUpload = -1;
 }
 
 //saving idname from text field
-- (BOOL)textFieldShouldReturn:(UITextField *)textField { is there another way to save?
+- (BOOL)textFieldShouldReturn:(UITextField *)textField { //is there another way to save?
     if (textField == self.idNameTextField) {
         [textField resignFirstResponder];
         idname = self.idNameTextField.text;
@@ -172,6 +177,7 @@ double timeOfLastUpload = -1;
     self.status.text = @"";
 }
 
+//button that starts transmitting
 - (IBAction)touchUpEvent:(id)sender {
     NSLog(@"pressing button here here!");
     stopped= !stopped;
@@ -205,7 +211,7 @@ double timeOfLastUpload = -1;
         
     }
 }
-
+//init
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -243,6 +249,7 @@ double timeOfLastUpload = -1;
  //*/
 
 
+//gets addresses from search string from apple
 - (void)getDestination: (NSString *) text
 {
     __block NSMutableArray *temp = [[NSMutableArray alloc] init];
@@ -308,6 +315,7 @@ double timeOfLastUpload = -1;
  }
  */
 
+//gets route from google
 - (void)getRoute
 {
     NSNumber *time = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
@@ -382,6 +390,7 @@ double timeOfLastUpload = -1;
     
 }
 
+//decodes route object from google
 - (NSMutableString *)decodePoly: (NSString *) encoded
 {
     NSMutableString *poly = [[NSMutableString alloc] init];//init  = new ArrayList<LatLng>();
@@ -424,7 +433,7 @@ double timeOfLastUpload = -1;
 }
 
 
-
+//uploads to Amazon
 - (void) sendToServer: (NSString *) route eta: (NSString *) eta
 {
     NSNumber *time = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
@@ -478,6 +487,7 @@ double timeOfLastUpload = -1;
     NSLog(@"paused!!!!!!!!!!!!!!!!!!!!!");
 }
 
+//starts location update loop everytime gps hardware gets a new location
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
     
@@ -495,6 +505,7 @@ double timeOfLastUpload = -1;
 
         //NSLOG("%f ");
         //region = currentLocation;
+        //starts timer to get location again in set sumber of seconds (gpsInterval)
         if([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive){
             [manager stopUpdatingLocation];
             timer = [NSTimer scheduledTimerWithTimeInterval:gpsInterval target:self selector:@selector(_turnOnLocationManager)  userInfo:nil repeats:NO];
@@ -530,6 +541,7 @@ double timeOfLastUpload = -1;
     //[manager stopMonitoringSignificantLocationChanges];
 }
 
+//get's location in the background
 - (void)getBGLocation
 {
     NSLog(@"starting background location");

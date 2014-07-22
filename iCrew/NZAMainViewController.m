@@ -352,7 +352,7 @@ double timeOfLastUpload = -1;
             if(polyDecoded.length > 0){
                 polyDecoded = [polyDecoded substringToIndex:polyDecoded.length-1]; //out of bounds; string length 0'
             } else {
-                NSLog(@"no poly to draw!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                NSLog(@"no poly to draw");
                 polyDecoded = @"";
             }
             //NSLog(@"encoded: %@", polyEncoded);
@@ -383,7 +383,7 @@ double timeOfLastUpload = -1;
             NSLog(@"successfully received data from google");
             [self sendToServer:polyDecoded eta:valueInSec];
         } else {
-            NSLog(@"google returned nothing, those bastards !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            NSLog(@"google returned nothing");
             [self getRoute];
         }
     }

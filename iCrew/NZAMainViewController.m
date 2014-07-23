@@ -24,12 +24,14 @@
 @implementation NZAMainViewController
 
 //NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/n.php";
-NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
+//NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
+NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
 CLLocationManager *manager;
 CLGeocoder *geocoder;
 CLPlacemark *placemark;
 BOOL stopped = true;
 bool startup = true;
+bool getETA = false;
 double currentLat = 0; 
 double currentLon = 0;
 //double destinationLat = 37.41500000; //moffett
@@ -199,9 +201,6 @@ double timeOfLastUpload = -1;
         self.status.text = @"transmitting";
         [self.transmitButton setTitle:@"Stop" forState:(UIControlStateNormal)];
         [self getDestination:@""];
-        //[self getRoute];
-        //[self sendToServer];
-        //[self sendTo];
     } else {
         //stop button hit
         [manager stopUpdatingLocation];
@@ -383,7 +382,7 @@ double timeOfLastUpload = -1;
             NSLog(@"successfully received data from google");
             [self sendToServer:polyDecoded eta:valueInSec];
         } else {
-            NSLog(@"google returned nothing");
+            NSLog(@"google returned nothing, try again");
             [self getRoute];
         }
     }
@@ -441,8 +440,10 @@ double timeOfLastUpload = -1;
     NSString *lat=[NSString stringWithFormat:@"%.10f",currentLat];
     //NSLog(@"currentLat %f lat %@",currentLat, lat);
     NSString *lon=[NSString stringWithFormat:@"%.10f",currentLon];
+    NSString *dlat=[NSString stringWithFormat:@"%.10f",destinationLat];
+    NSString *dlon=[NSString stringWithFormat:@"%.10f",destinationLon];
     NSString *name=[NSString stringWithFormat:@"'%@'",idname];
-    route = [NSString stringWithFormat:@"'%@'",route];
+    if(getETA)route = [NSString stringWithFormat:@"'%@'",route];
     //NSMutableData* _receivedData;
     //route = @"placeholder";
     //NSString *url = [NSString stringWithFormat: @"%@?id=%@&time=%@&latitude=%@&longitude=%@&route=%@&eta=%@",serverUrl,idname,time,lat,lon,route,eta]; // //route=%@&
@@ -459,10 +460,16 @@ double timeOfLastUpload = -1;
      NSLog(@"%@",route);
      NSLog(@"%@",eta);
      */
-    NSString* str = [NSString stringWithFormat: @"id=%@&time=%@&latitude=%@&longitude=%@&route=%@&eta=%@",name,time,lat,lon,route,eta];
-    NSLog(@"lat %@ lon %@ eta %@", lat, lon, eta);
+     NSString* data = @"empty";
+    if(getETA){
+        data = [NSString stringWithFormat: @"id=%@&time=%@&latitude=%@&longitude=%@&route=%@&eta=%@",name,time,lat,lon,route,eta];
+    } else {
+        data = [NSString stringWithFormat: @"id=%@&time=%@&lat=%@&lon=%@&destlat=%@&destlon=%@",name,time,lat,lon,dlat,dlon];
+    }
+    //NSLog(@"lat %@ lon %@ eta %@", lat, lon, eta);
    // NSLog(@"%@ sending str %@", idname, [NSString stringWithFormat: @"id=%@&time=%@&latitude=%@&longitude=%@&route=%@&eta=%@",name,time,lat,lon,@"...",eta]);
-    NSData* strData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"sending... %@",data);
+    NSData* strData = [data dataUsingEncoding:NSUTF8StringEncoding];
     //NSDictionary* jsonDictionary = @{@"id":idname,@"time":time,@"latitude":lat,@"longitude":lon,@"route":route,@"eta":eta};
     //NSError *error;
     //NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDictionary options:NSJSONWritingPrettyPrinted error:&error];
@@ -528,11 +535,13 @@ double timeOfLastUpload = -1;
         //[self.map showsUserLocation];
         //NSLog(@"here did");
         //get route send to server
-        if(!startup)[self getRoute];
-        
+        if(getETA) {
+            if(!startup)[self getRoute];
+        } else {
+            if(!startup)[self sendToServer:@"-1" eta:@"-1"];
+        }
+
     }
-    
-    
 }
 
 - (void)setLocationBackToNormal

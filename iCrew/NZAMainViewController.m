@@ -25,7 +25,9 @@
 
 //NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/n.php";
 //NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
-NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
+//NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
+//new server
+NSString *serverUrl = @"http://ec2-54-186-31-103.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
 CLLocationManager *manager;
 CLGeocoder *geocoder;
 CLPlacemark *placemark;

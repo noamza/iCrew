@@ -9,8 +9,16 @@
 #import "NZAMainViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+//#import "Transmitter.h"
+#import <FYX/FYX.h>
+#import <FYX/FYXLogging.h>
+#import <FYX/FYXVisitManager.h>
+#import <FYX/FYXSightingManager.h>
+#import <FYX/FYXTransmitter.h>
+#import <FYX/FYXVisit.h>
 
-@interface NZAMainViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource>
+
+@interface NZAMainViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource, FYXServiceDelegate, FYXVisitDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *transmitButton; //comment
 @property (weak, nonatomic) IBOutlet UILabel *status;
@@ -18,6 +26,11 @@
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *sdController;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet MKMapView *map;
+@property (weak, nonatomic) IBOutlet UILabel *btAirport; //, *btSecurity, *btGate;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
+
+@property NSMutableArray *transmitters;
+@property FYXVisitManager *visitManager;
 
 @end
 
@@ -27,7 +40,12 @@
 //NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/test.php";
 //NSString *serverUrl = @"http://ec2-54-200-25-136.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
 //new server
-NSString *serverUrl = @"http://ec2-54-186-31-103.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
+NSString *serverURL = @"http://ec2-54-186-31-103.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/";
+
+NSString *addCrewURL = @"http://ec2-54-186-31-103.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCrew.php";
+
+NSString *checkInURL = @"http://ec2-54-186-31-103.us-west-2.compute.amazonaws.com/flightcrewang/app/ajax/addCheckIn.php";
+
 CLLocationManager *manager;
 CLGeocoder *geocoder;
 CLPlacemark *placemark;
@@ -57,8 +75,15 @@ double timeOfLastUpload = -1;
 
 - (void)viewDidLoad
 {
+    [FYX setAppId:@"8a177ebc653abf803b4eef5841d2c6f037bb1c6a97f1c6f7b8534879b81bebc3"
+        appSecret:@"5b8523e0e9d02aaeec7f4376fd8601609c8ea6426a8ed333efb3a6077699374c"
+      callbackUrl:@"ios://authcode"];
+    [FYX startService:self];
+    
     [super viewDidLoad];
     //restore from persistent memory
+    
+    self.progressBar.progress = 0;
     
     if([[NSUserDefaults standardUserDefaults] stringForKey:@"idname"] != nil){
         idname = [[NSUserDefaults standardUserDefaults] stringForKey:@"idname"];
@@ -89,6 +114,107 @@ double timeOfLastUpload = -1;
     NSLog(@"started FOR THE FIRST TIME stored data: %@ %@ %f %f", idname, destination, destinationLat, destinationLon);
     
 }
+
+- (void)serviceStarted
+{
+    NSLog(@"#########Proximity service started!");
+    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"fyx_service_started_key"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    self.transmitters = [NSMutableArray new];
+    
+    self.visitManager = [[FYXVisitManager alloc] init];
+    self.visitManager.delegate = self;
+    
+    [self.visitManager startWithOptions:@{FYXVisitOptionDepartureIntervalInSecondsKey:@15,
+                                          FYXSightingOptionSignalStrengthWindowKey:@(FYXSightingOptionSignalStrengthWindowNone)}];
+}
+
+- (void)receivedSighting:(FYXVisit *)visit updateTime:(NSDate *)updateTime RSSI:(NSNumber *)RSSI
+{
+    //NSLog(@" %@ %@ %@", RSSI, visit.transmitter.battery, visit.transmitter.temperature);
+    
+    //NSLog(@" %@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+
+    //if([visit.transmitter.name isEqualToString:@"B2"]){
+    NSString *theInfo = [NSString stringWithFormat: @"%@ %@ %@ %@",
+                         [visit.transmitter.name substringToIndex:2], //for B1 which is longer.
+                         RSSI,
+                         visit.transmitter.battery,
+                         visit.transmitter.temperature];
+    
+    
+    
+     //NSLog(@"%@", theInfo);
+    if([RSSI floatValue] > -55.0f){
+        //NSLog(@"Here in -60");
+        if ([visit.transmitter.name rangeOfString:@"B1"].location != NSNotFound){
+            if(self.progressBar.progress < 1/3.0f){
+                NSLog(@" %@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                self.btAirport.text = @"Ticket Checked";
+                self.progressBar.progress = 1/3.0f;
+                [self checkInPassegerOnServer:@"1"];
+            }
+        }
+        
+        if ([visit.transmitter.name rangeOfString:@"B2"].location != NSNotFound){
+            if(self.progressBar.progress < 2/3.0f){
+                NSLog(@" %@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                self.progressBar.progress = 2/3.0f;
+                self.btAirport.text = @"Passed Security";
+                [self checkInPassegerOnServer:@"2"];
+            }
+        }
+        
+        if ([visit.transmitter.name rangeOfString:@"B3"].location != NSNotFound){
+            if(self.progressBar.progress < 1/1.0f){
+                NSLog(@" %@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                self.btAirport.text = @"At Gate";
+                self.progressBar.progress = 3/3.0f;
+                [self checkInPassegerOnServer:@"3"];
+            }
+        }
+    }
+    
+    
+}
+
+- (void) checkInPassegerOnServer: (NSString *) fence
+{
+    NSNumber *date = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    // time = [NSlong numberWithDouble:[date doubleValue]*1000.0];
+    double time = [date doubleValue]*1000.0;
+    NSMutableURLRequest *theRequest=[NSMutableURLRequest
+                                     requestWithURL:[NSURL URLWithString:checkInURL]
+                                     cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                     timeoutInterval:60.0];
+    NSString *name=[NSString stringWithFormat:@"'%@'",idname];
+    NSString* data = @"empty";
+    data = [NSString stringWithFormat: @"id=%@&time=%.0f&locationid=%@",name,time,fence]; //float 1411506503680
+    //NSLog(@"sending... %@",data);                                                       double  1411506541520
+    NSData* strData = [data dataUsingEncoding:NSUTF8StringEncoding];
+    [theRequest setHTTPMethod:@"POST"];
+    [theRequest setHTTPBody:strData];
+    [theRequest addValue:@"utf-8" forHTTPHeaderField:@"charset"];
+    NSURLConnection *con = [[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
+    if (con) {
+        //_receivedData=[theRequest ];
+        NSLog(@"%@ successfully Checked In server", data);
+    } else {
+        NSLog(@"%@",@"!!!!!!!!!!!!!!!!!!!!!!!!!!connection error to CHECK IN server");
+    }
+}
+
+
+
+
+
+
+
+
+//////// non beacon methods
+
 
 
 - (void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope
@@ -258,8 +384,7 @@ double timeOfLastUpload = -1;
         //NSLog(@"gettingDestination: # of placemarks %d", [placemarks count]);
         for (CLPlacemark* aPlacemark in placemarks)
         {
-            for (NSString *key in aPlacemark.addressDictionary){
-            }
+            //for (NSString *key in aPlacemark.addressDictionary){}
             NSArray *adArr = [aPlacemark.addressDictionary valueForKey:@"FormattedAddressLines"];
             if([[aPlacemark.addressDictionary valueForKey:@"FormattedAddressLines"] count]==3){
                 NSString *address = [NSString stringWithFormat:@"%@, %@",adArr[0], adArr[1] /*[2]*/ ];
@@ -362,17 +487,18 @@ double timeOfLastUpload = -1;
             NSDictionary *leg = legsArr[0];
             NSDictionary *duration = [leg valueForKey:@"duration"];
             NSString *valueInSec = [duration valueForKey:@"value"];
+            /*
             //NSLog(@"the value in seconds: %@", valueInSec);
-            NSArray *steps = [leg valueForKey:@"steps"];
+             NSArray *steps = [leg valueForKey:@"steps"];
             //NSLog(@"%@", @"steps:::::::::");
-            for (NSString *key in leg) {
+            //for (NSString *key in leg) {
                 //NSLog(@"key %@", key);
                 //NSLog(@"key %@ value %@",key,[tempDic valueForKey:key]);
-            }
-            for (NSString *key in route) {
+            //}
+            //for (NSString *key in route) {
                 //NSLog(@"key %@", key);
                 //NSLog(@"key %@ value %@",key,[tempDic valueForKey:key]);
-            }
+            //}
             for (NSDictionary *tempDic in steps) {
                 for (NSString *key in tempDic) {
                     //NSLog(@"steps key %@", key);
@@ -380,6 +506,7 @@ double timeOfLastUpload = -1;
                 }
                 
             }
+             */
             timeOfLastUpload = time.doubleValue;
             NSLog(@"successfully received data from google");
             [self sendToServer:polyDecoded eta:valueInSec];
@@ -449,9 +576,9 @@ double timeOfLastUpload = -1;
     //NSMutableData* _receivedData;
     //route = @"placeholder";
     //NSString *url = [NSString stringWithFormat: @"%@?id=%@&time=%@&latitude=%@&longitude=%@&route=%@&eta=%@",serverUrl,idname,time,lat,lon,route,eta]; // //route=%@&
-    NSLog(@"sending to server: %@",serverUrl);
+    NSLog(@"sending to server: %@",addCrewURL);
     NSMutableURLRequest *theRequest=[NSMutableURLRequest
-                                     requestWithURL:[NSURL URLWithString:serverUrl]
+                                     requestWithURL:[NSURL URLWithString:addCrewURL]
                                      cachePolicy:NSURLRequestUseProtocolCachePolicy
                                      timeoutInterval:60.0];
     /*

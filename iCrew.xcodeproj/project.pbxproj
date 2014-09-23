@@ -24,6 +24,17 @@
 		CB79981818C69A4500792001 /* iCrewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CB79981718C69A4500792001 /* iCrewTests.m */; };
 		CB79982218C69A9D00792001 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB79982118C69A9D00792001 /* Main.storyboard */; };
 		CB79982418C69E2100792001 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB79982318C69E2100792001 /* MapKit.framework */; };
+		CBC14CB019CB8ABD00BA719C /* FYX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CAF19CB8ABD00BA719C /* FYX.framework */; };
+		CBC14CB219CB8F0200BA719C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CB119CB8F0200BA719C /* libz.dylib */; };
+		CBC14CB419CB8F7600BA719C /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CB319CB8F7600BA719C /* CoreBluetooth.framework */; };
+		CBC14CB919CB903F00BA719C /* ContextLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CB619CB903F00BA719C /* ContextLocation.framework */; };
+		CBC14CBA19CB903F00BA719C /* DataModels.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBC14CB819CB903F00BA719C /* DataModels.bundle */; };
+		CBC14CC319CB906200BA719C /* ContextProfiling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CBC19CB906200BA719C /* ContextProfiling.framework */; };
+		CBC14CC419CB906200BA719C /* ContextCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CBE19CB906200BA719C /* ContextCore.framework */; };
+		CBC14CC519CB906200BA719C /* NetworkServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CC019CB906200BA719C /* NetworkServices.framework */; };
+		CBC14CC619CB906200BA719C /* Common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CC219CB906200BA719C /* Common.framework */; };
+		CBC14CC819CB907D00BA719C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CC719CB907D00BA719C /* CoreData.framework */; };
+		CBC14CCA19CB908900BA719C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC14CC919CB908900BA719C /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +70,17 @@
 		CB79981718C69A4500792001 /* iCrewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCrewTests.m; sourceTree = "<group>"; };
 		CB79982118C69A9D00792001 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CB79982318C69E2100792001 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		CBC14CAF19CB8ABD00BA719C /* FYX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FYX.framework; path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/FYX.framework; sourceTree = "<group>"; };
+		CBC14CB119CB8F0200BA719C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CBC14CB319CB8F7600BA719C /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		CBC14CB619CB903F00BA719C /* ContextLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ContextLocation.framework; sourceTree = "<group>"; };
+		CBC14CB819CB903F00BA719C /* DataModels.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DataModels.bundle; sourceTree = "<group>"; };
+		CBC14CBC19CB906200BA719C /* ContextProfiling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ContextProfiling.framework; sourceTree = "<group>"; };
+		CBC14CBE19CB906200BA719C /* ContextCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ContextCore.framework; sourceTree = "<group>"; };
+		CBC14CC019CB906200BA719C /* NetworkServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NetworkServices.framework; sourceTree = "<group>"; };
+		CBC14CC219CB906200BA719C /* Common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Common.framework; sourceTree = "<group>"; };
+		CBC14CC719CB907D00BA719C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		CBC14CC919CB908900BA719C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,9 +88,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBC14CCA19CB908900BA719C /* Security.framework in Frameworks */,
+				CBC14CC819CB907D00BA719C /* CoreData.framework in Frameworks */,
+				CBC14CB419CB8F7600BA719C /* CoreBluetooth.framework in Frameworks */,
+				CBC14CB219CB8F0200BA719C /* libz.dylib in Frameworks */,
+				CBC14CB019CB8ABD00BA719C /* FYX.framework in Frameworks */,
+				CBC14CC319CB906200BA719C /* ContextProfiling.framework in Frameworks */,
+				CBC14CC419CB906200BA719C /* ContextCore.framework in Frameworks */,
 				CB62B92618CA8BF300F3F9C2 /* CoreLocation.framework in Frameworks */,
 				CB79982418C69E2100792001 /* MapKit.framework in Frameworks */,
+				CBC14CC519CB906200BA719C /* NetworkServices.framework in Frameworks */,
 				CB7997F518C69A4400792001 /* CoreGraphics.framework in Frameworks */,
+				CBC14CB919CB903F00BA719C /* ContextLocation.framework in Frameworks */,
+				CBC14CC619CB906200BA719C /* Common.framework in Frameworks */,
 				CB7997F718C69A4400792001 /* UIKit.framework in Frameworks */,
 				CB7997F318C69A4400792001 /* Foundation.framework in Frameworks */,
 			);
@@ -109,6 +141,16 @@
 		CB7997F118C69A4400792001 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CBC14CC919CB908900BA719C /* Security.framework */,
+				CBC14CC719CB907D00BA719C /* CoreData.framework */,
+				CBC14CBB19CB906200BA719C /* ContextProfiling.embeddedframework */,
+				CBC14CBD19CB906200BA719C /* ContextCore.embeddedframework */,
+				CBC14CBF19CB906200BA719C /* NetworkServices.embeddedframework */,
+				CBC14CC119CB906200BA719C /* Common.embeddedframework */,
+				CBC14CB519CB903F00BA719C /* ContextLocation.embeddedframework */,
+				CBC14CB319CB8F7600BA719C /* CoreBluetooth.framework */,
+				CBC14CB119CB8F0200BA719C /* libz.dylib */,
+				CBC14CAF19CB8ABD00BA719C /* FYX.framework */,
 				CB62B92518CA8BF300F3F9C2 /* CoreLocation.framework */,
 				CB79982318C69E2100792001 /* MapKit.framework */,
 				CB7997F218C69A4400792001 /* Foundation.framework */,
@@ -162,6 +204,60 @@
 				CB79981418C69A4500792001 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CBC14CB519CB903F00BA719C /* ContextLocation.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CB619CB903F00BA719C /* ContextLocation.framework */,
+				CBC14CB719CB903F00BA719C /* Resources */,
+			);
+			name = ContextLocation.embeddedframework;
+			path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextLocation.embeddedframework;
+			sourceTree = "<group>";
+		};
+		CBC14CB719CB903F00BA719C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CB819CB903F00BA719C /* DataModels.bundle */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CBC14CBB19CB906200BA719C /* ContextProfiling.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CBC19CB906200BA719C /* ContextProfiling.framework */,
+			);
+			name = ContextProfiling.embeddedframework;
+			path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextProfiling.embeddedframework;
+			sourceTree = "<group>";
+		};
+		CBC14CBD19CB906200BA719C /* ContextCore.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CBE19CB906200BA719C /* ContextCore.framework */,
+			);
+			name = ContextCore.embeddedframework;
+			path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextCore.embeddedframework;
+			sourceTree = "<group>";
+		};
+		CBC14CBF19CB906200BA719C /* NetworkServices.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CC019CB906200BA719C /* NetworkServices.framework */,
+			);
+			name = NetworkServices.embeddedframework;
+			path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/NetworkServices.embeddedframework;
+			sourceTree = "<group>";
+		};
+		CBC14CC119CB906200BA719C /* Common.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				CBC14CC219CB906200BA719C /* Common.framework */,
+			);
+			name = Common.embeddedframework;
+			path = ../../Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/Common.embeddedframework;
 			sourceTree = "<group>";
 		};
 		CBC386B8191965C600A69019 /* iPad */ = {
@@ -258,6 +354,7 @@
 				CB79982218C69A9D00792001 /* Main.storyboard in Resources */,
 				CB7997FD18C69A4500792001 /* InfoPlist.strings in Resources */,
 				CB62B92818D1244F00F3F9C2 /* notes in Resources */,
+				CBC14CBA19CB903F00BA719C /* DataModels.bundle in Resources */,
 				CB79980518C69A4500792001 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,6 +497,15 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextLocation.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextProfiling.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextCore.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/NetworkServices.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/Common.embeddedframework,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCrew/iCrew-Prefix.pch";
 				INFOPLIST_FILE = "iCrew/iCrew-Info.plist";
@@ -418,6 +524,15 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextLocation.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextProfiling.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/ContextCore.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/NetworkServices.embeddedframework,
+					/Users/nalmog/Desktop/app/gimbalsdk_1.25.3_ios/Frameworks/Common.embeddedframework,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iCrew/iCrew-Prefix.pch";
 				INFOPLIST_FILE = "iCrew/iCrew-Info.plist";

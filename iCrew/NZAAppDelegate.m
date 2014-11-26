@@ -32,7 +32,7 @@ NZAMainViewController *nv;
     
     //self.UIApplication.backgroundRefreshStatus; //check to see if background location is available
 
-    NSLog(@"entered background");
+    NSLog(@"** entered background **");
     [nv getBGLocation];
     //write data to disk
     //needs to finish in 5 secs

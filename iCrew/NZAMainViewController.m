@@ -16,9 +16,10 @@
 #import <FYX/FYXSightingManager.h>
 #import <FYX/FYXTransmitter.h>
 #import <FYX/FYXVisit.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 
-@interface NZAMainViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource, FYXServiceDelegate, FYXVisitDelegate, FYXiBeaconVisitDelegate>
+@interface NZAMainViewController () <CLLocationManagerDelegate, UITableViewDelegate, UITableViewDataSource, FYXServiceDelegate, FYXVisitDelegate, FYXiBeaconVisitDelegate,  CBPeripheralManagerDelegate >
 
     @property (weak, nonatomic) IBOutlet UIButton *transmitButton; //comment
     @property (weak, nonatomic) IBOutlet UILabel *status;
@@ -28,8 +29,14 @@
     @property (weak, nonatomic) IBOutlet MKMapView *map;
     @property (weak, nonatomic) IBOutlet UILabel *btAirport; //, *btSecurity, *btGate;
     @property (weak, nonatomic) IBOutlet UIProgressView *progressBar;
+    //Gimbal
     @property NSMutableArray *transmitters;
     @property FYXVisitManager *visitManager;
+    //as iBeacon
+    @property CBPeripheralManager * peripheralManager;
+
+    @property (weak, nonatomic) IBOutlet UISlider *beaconSlider;
+    @property (weak, nonatomic) IBOutlet UILabel *rssi;
 
 @end
 @implementation NZAMainViewController
@@ -55,6 +62,10 @@ NSString *destination = @"";
 int gpsInterval = 5;
 CLRegion * region;
 double timeOfLastUpload = -1;
+float rssiThreshold = 30.0f;
+
+//Transmitting as iBeacon
+CBPeripheralManager * myPeripheralManager;
 
 - (void)test{NSLog(@"yes indeed this test worked");}
 
@@ -70,6 +81,7 @@ double timeOfLastUpload = -1;
     
     addCrewURL = [NSString stringWithFormat:@"%@addCrew.php",serverURL];
     checkInURL = [NSString stringWithFormat:@"%@addCheckIn.php",serverURL];
+    //makes progress bar wider
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 7.0f);
     self.progressBar.transform = transform;
     self.progressBar.progress = 0;
@@ -84,6 +96,11 @@ double timeOfLastUpload = -1;
         self.searchBar.text = destination;
         destinationLat = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLat"];
         destinationLon = [[NSUserDefaults standardUserDefaults] doubleForKey:@"destinationLon"];
+    }
+    if([[NSUserDefaults standardUserDefaults] stringForKey:@"rssiThreshold"] != nil) {
+        self.beaconSlider.value = [[NSUserDefaults standardUserDefaults] floatForKey:@"rssiThreshold"];
+        rssiThreshold = [[NSUserDefaults standardUserDefaults] floatForKey:@"rssiThreshold"];
+        self.rssi.text = [NSString stringWithFormat:@"%.1f", rssiThreshold];
     }
     
     //Initialize location manager
@@ -100,11 +117,75 @@ double timeOfLastUpload = -1;
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
      */
-    int tempLen = destination.length > 15? 15 : destination.length; //avoid long log names
+    int tempLen = (int)destination.length > 15? 15 : destination.length; //avoid long log names
     NSLog(@"started up from off, stored data: %@ * %@... * %f * %f", idname,
           [destination substringToIndex:tempLen], destinationLat, destinationLon);
     
+    [self initBeacon];
+    
 }
+
+- (IBAction)sliderValueChanged:(id)sender {
+    if (sender == self.beaconSlider) {
+        rssiThreshold = self.beaconSlider.value;
+        //self.btAirport.text = [NSString stringWithFormat: @"%@ (rssi limit %f)", self.btAirport.text, self.beaconSlider.value];
+        self.rssi.text = [NSString stringWithFormat: @"rssi %.1f",rssiThreshold];
+        if(rssiThreshold == 30.0f){
+            self.progressBar.progress = 0.f;
+            self.btAirport.text = @"";
+        }
+        [[NSUserDefaults standardUserDefaults] setFloat:rssiThreshold forKey:@"rssiThreshold"];
+    }
+}
+
+
+//bluetooth functions
+
+CLBeaconRegion *beaconRegion;
+NSMutableDictionary *beaconPeripheralData;
+/*
+- (void)beBT
+{
+    peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];
+}
+- (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
+{
+    //indicates whether the peripheral manager is available, is called when the peripheral manager’s state is updated.
+}
+ */
+
+- (void)initBeacon {
+    NSLog(@"Starting beacon");
+    //                                                 @"A0000000-0000-0000-0000-00000000000A"
+    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString: @"C0ffEEBB-AF00-0000-0000-CAFE00000001"];//@"23542266-18D1-4FE4-B4A1-23F8195B9D39"];
+    beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:uuid
+                                                                major:1
+                                                                minor:1
+                                                           identifier:@"the iCrew beacon"];
+    [self transmitBeacon:self];
+}
+
+- (IBAction)transmitBeacon:(id)sender {
+    beaconPeripheralData = [beaconRegion peripheralDataWithMeasuredPower:nil];
+    self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self
+                                                                     queue:nil
+                                                                   options:nil];
+}
+
+-(void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral {
+    NSLog(@"peripheralManager (*))(*)(*()*###())(*()*()*()*");
+    
+    if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
+        NSLog(@"peripheralManager Powered On");
+        [self.peripheralManager startAdvertising:beaconPeripheralData];
+    } else if (peripheral.state == CBPeripheralManagerStatePoweredOff) {
+        NSLog(@"peripheralManager Powered Off");
+        [self.peripheralManager stopAdvertising];
+    }
+}
+
+
+
 
 //Called when gimbal bluetooth is started
 - (void)serviceStarted
@@ -117,7 +198,7 @@ double timeOfLastUpload = -1;
     self.visitManager.delegate = self;
     self.visitManager.iBeaconDelegate = self;
     //[self.visitManager start];
-    [self.visitManager startWithOptions:@{FYXVisitOptionDepartureIntervalInSecondsKey:@15,FYXSightingOptionSignalStrengthWindowKey:@(FYXSightingOptionSignalStrengthWindowNone)}];
+    [self.visitManager startWithOptions:@{FYXVisitOptionDepartureIntervalInSecondsKey:@5,FYXSightingOptionSignalStrengthWindowKey:@(FYXSightingOptionSignalStrengthWindowNone)}];
 }
 
 //called whenever device detects bluetooth beacon
@@ -130,29 +211,29 @@ double timeOfLastUpload = -1;
                          visit.transmitter.battery,
                          visit.transmitter.temperature]; theInfo = theInfo;
      //NSLog(@"%@", theInfo);
-    if([RSSI floatValue] > -50.0f){ //why multiple times
+    if([RSSI floatValue] > - rssiThreshold){ //why multiple times
         //NSLog(@"pbar %f", self.progressBar.progress);
         if ([visit.transmitter.name rangeOfString:@"B1"].location != NSNotFound){
             if(self.progressBar.progress < 1/3.0f){
-                NSLog(@"%@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                NSLog(@"%@ RSSI %@ %.1f",[visit.transmitter.name substringToIndex:2], RSSI, rssiThreshold);
                 self.btAirport.text = @"Ticket Checked";
                 self.progressBar.progress = 1/3.0f;
                 [self checkInPassegerOnServer:@"1"];
             }
         }
         
-        if ([visit.transmitter.name rangeOfString:@"B2"].location != NSNotFound){
+        if ([visit.transmitter.name rangeOfString:@"B1"].location != NSNotFound){ //B2
             if(self.progressBar.progress < 2/3.0f){
-                NSLog(@"%@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                NSLog(@"%@ RSSI %@ %.1f",[visit.transmitter.name substringToIndex:2], RSSI, rssiThreshold);
                 self.progressBar.progress = 2/3.0f;
                 self.btAirport.text = @"Passed Security";
                 [self checkInPassegerOnServer:@"2"];
             }
         }
         
-        if ([visit.transmitter.name rangeOfString:@"B3"].location != NSNotFound){
+        if ([visit.transmitter.name rangeOfString:@"B2"].location != NSNotFound){ //B3
             if(self.progressBar.progress < 1/1.0f){
-                NSLog(@"%@ RSSI %@",[visit.transmitter.name substringToIndex:2], RSSI);
+                NSLog(@"%@ RSSI %@ %.1f",[visit.transmitter.name substringToIndex:2], RSSI, rssiThreshold);
                 self.btAirport.text = @"At Gate";
                 self.progressBar.progress = 3/3.0f;
                 [self checkInPassegerOnServer:@"3"];
@@ -189,24 +270,47 @@ double timeOfLastUpload = -1;
     }
 }
 
+//      iBeacon Code
+/*
 - (void)didArriveIBeacon:(FYXiBeaconVisit *)visit;
 {
     // this will be invoked when a managed Gimbal beacon is sighted for the first time
-    NSLog(@"I arrived within the proximity of a Gimbal beacon!!! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
+    NSLog(@"Ibeacon didArriveIBeacon ! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
 }
 - (void)receivedIBeaconSighting:(FYXiBeaconVisit *)visit updateTime:(NSDate *)updateTime RSSI:(NSNumber *)RSSI;
 {
     // this will be invoked when a managed Gimbal beacon is sighted during an on-going visit
-    NSLog(@"I received a sighting!!! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
+    NSLog(@"Ibeacon receivedIBeaconSighting! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
+    
+    NSString * temp = self.btAirport.text;
     //self.btAirport.text = @"ibeacon!";
+    self.btAirport.text = [self.btAirport.text isEqualToString:@"ibeacon!"] || [self.btAirport.text isEqualToString:@"departed!"]? @"": @"ibeacon!";
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(clearLabel:) userInfo: temp repeats:NO];
+}
+
+-(void) clearLabel:(NSTimer *) tt
+{
+    NSLog(@"cl: %@ ui: %@", self.btAirport.text, tt.userInfo);
+    self.btAirport.text = tt.userInfo;
+    //self.btAirport.text = [tt.userInfo isEqualToString:@"ibeacon!"] || [tt.userInfo isEqualToString:@"departed!"]? @"": tt.userInfo;
+    NSLog(@"cl: %@ ui: %@", self.btAirport.text, tt.userInfo);
+    tt = nil;
     
 }
+
 - (void)didDepartIBeacon:(FYXiBeaconVisit *)visit;
 {
     // this will be invoked when a managed Gimbal beacon has not been sighted for some time
-    //NSLog(@"I left the proximity of a Gimbal beacon!!!! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
-    //NSLog(@"I was around the beacon for %f seconds", visit.dwellTime);
+    NSLog(@"Ibeacon didDepartIBeacon! Proximity UUID:%@ Major:%@ Minor:%@", visit.iBeacon.uuid, visit.iBeacon.major, visit.iBeacon.minor);
+    NSLog(@"I was around the beacon for %f seconds", visit.dwellTime);
+    
+    NSString * temp = self.btAirport.text;
+    self.btAirport.text = @"departed!";
+    //self.btAirport.text = [self.btAirport.text isEqualToString:@"ibeacon!"] || [self.btAirport.text isEqualToString:@"departed!"]? @"": @"departed!";
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(clearLabel:) userInfo: temp repeats:NO];
+    
 }
+ //*/
 
 //<-- end beacon methods -->
 

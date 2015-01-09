@@ -88,9 +88,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBC14CB419CB8F7600BA719C /* CoreBluetooth.framework in Frameworks */,
 				CBC14CCA19CB908900BA719C /* Security.framework in Frameworks */,
 				CBC14CC819CB907D00BA719C /* CoreData.framework in Frameworks */,
-				CBC14CB419CB8F7600BA719C /* CoreBluetooth.framework in Frameworks */,
 				CBC14CB219CB8F0200BA719C /* libz.dylib in Frameworks */,
 				CBC14CB019CB8ABD00BA719C /* FYX.framework in Frameworks */,
 				CBC14CC319CB906200BA719C /* ContextProfiling.framework in Frameworks */,
@@ -435,6 +435,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iOS Development: Kee Palopo (72K2865537)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -474,6 +475,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iOS Development: Kee Palopo (72K2865537)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;

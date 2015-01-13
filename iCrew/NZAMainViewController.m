@@ -79,7 +79,7 @@ CBPeripheralManager * myPeripheralManager;
       callbackUrl:@"ios://authcode"];
     [FYX startService:self];
     
-    addCrewURL = [NSString stringWithFormat:@"%@addCrew.php",serverURL];
+    addCrewURL = [NSString stringWithFormat:@"%@addCrew.php",serverURL]; //commit test
     checkInURL = [NSString stringWithFormat:@"%@addCheckIn.php",serverURL];
     //makes progress bar wider
     CGAffineTransform transform = CGAffineTransformMakeScale(1.0f, 7.0f);
